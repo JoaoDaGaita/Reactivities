@@ -45,10 +45,10 @@ namespace API.Controllers
             return await _mediator.Send(commnad);
         }
 
-        //  [HttpDelete("{id}")]
-        // public async Task<ActionResult<Unit>> Delete(Guid id)
-        // {
-        //     return await _mediator.Send(new Delete.Command{Id = id});
-        // }
+         [HttpDelete("{id}")]
+        public async Task<ActionResult<Unit>> Delete(Guid id)
+        {
+            return await _mediator.Send(new Delete.Command{Id = id});
+        }
     }
 }
