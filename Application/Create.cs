@@ -7,47 +7,32 @@ using Persistence;
 
 namespace Application
 {
-    public class Create
+  public class Create
+  {
+    public class Command : IRequest
     {
-        public class Command : IRequest
-        {
-            public Guid Id { get; set; }
-            public string Title { get; set; }
-            public string Description { get; set; }
-            public string Category { get; set; }
-            public DateTime Date { get; set; }
-            public string City { get; set; }
-            public string Venue { get; set; }
-        }
-
-        public class Handler : IRequestHandler<Command>
-        {
-            private readonly DataContext _context;
-            public Handler(DataContext context)
-            {
-                _context = context;
-            }
-
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var acvitity = new Activity
-                {   
-                    Id = request.Id,
-                    Title = request.Title,
-                    Description = request.Description,
-                    Category = request.Category,
-                    Date = request.Date,
-                    City = request.City,
-                    Venue = request.Venue
-                };
-
-                _context.Activities.Add(acvitity);
-                var success = await _context.SaveChangesAsync() > 0;
-
-                if(success) return Unit.Value;
-
-                throw new Exception("Problem saving changes.");
-            }
-        }
+      public Activity Activity { get; set; }
     }
+
+    public class Handler : IRequestHandler<Command>
+    {
+      private readonly DataContext _context;
+      public Handler(DataContext context)
+      {
+        _context = context;
+      }
+
+      public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+      {
+        _context.Activities.Add(request.Activity);
+
+        var success = await _context.SaveChangesAsync() > 0;
+
+        if (success)
+          return Unit.Value;
+        throw new Exception("Problem on saving changes");
+
+      }
+    }
+  }
 }
